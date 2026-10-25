@@ -4,10 +4,9 @@ const prevBtn = document.querySelector("#prevBtn");
 const nextBtn = document.querySelector("#nextBtn");
 const pageInfo = document.querySelector("#pageInfo");
 
-const photos = Array.from({ length: 33 }, (_, i) => {
+const photos = Array.from({ length: 36 }, (_, i) => {
     const number = i + 1;
-    const extension = number <= 3 ? "jpeg" : "jpg";
-    return `images/foto (${number}).${extension}`;
+    return `images/foto (${number}).webp`;
 });
 
 const perPage = 4;
