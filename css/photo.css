@@ -1,0 +1,276 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --rose: #b76e79;
+    --paper: #fffdf8;
+    --ink: #5e4244;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100svh;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f8e7e8;
+    color: var(--ink);
+}
+
+.bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+        radial-gradient(circle at 15% 15%, rgba(255,255,255,.95), transparent 32%),
+        radial-gradient(circle at 85% 80%, rgba(230,174,180,.45), transparent 35%),
+        linear-gradient(135deg, #fdf5ee, #f7e1e5 55%, #f5e8d8);
+}
+
+.memory-page {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 12px 14px 24px;
+    isolation: isolate;
+}
+
+/* Heading */
+.page-heading {
+    text-align: center;
+    padding: 12px 0 28px;
+}
+
+.eyebrow {
+    margin-bottom: 8px;
+    color: #a56c73;
+    font: 700 10px/1.5 Arial, sans-serif;
+    letter-spacing: 3px;
+}
+
+h1 {
+    margin-top: 0;
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 500;
+}
+
+.caption {
+    margin-top: 8px;
+    color: var(--rose);
+    font-size: clamp(12px, 1.5vw, 16px);
+    font-style: italic;
+}
+
+/* Galeri: 4 foto dalam susunan 2 x 2 */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: clamp(8px, 1.2vw, 14px);
+    width: min(100%, 900px);
+    height: clamp(280px, calc(100svh - 270px), 650px);
+    margin: 0 auto;
+}
+
+.photo-card {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    padding: 5px;
+    background: var(--paper);
+    box-shadow:
+        0 3px 9px rgba(87,54,51,.18),
+        0 1px 2px rgba(87,54,51,.1);
+    overflow: hidden;
+    transform: rotate(var(--tilt, 0deg));
+    animation: arrive .35s both;
+}
+
+.photo-card:nth-child(3n) {
+    --tilt: 1.2deg;
+}
+
+.photo-card:nth-child(3n + 1) {
+    --tilt: -1deg;
+}
+
+.photo-card:nth-child(4n) {
+    --tilt: .5deg;
+}
+
+.photo-card:hover {
+    z-index: 3;
+    transform: rotate(0) scale(1.025);
+    box-shadow: 0 8px 20px rgba(87,54,51,.25);
+}
+
+.photo-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    background: #f0e5df;
+}
+
+.photo-number {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    padding: 2px 4px;
+    color: #8b6764;
+    background: rgba(255,253,248,.85);
+    font: 9px Arial, sans-serif;
+    opacity: .85;
+}
+
+.photo-missing img {
+    opacity: .35;
+}
+
+/* Tombol pagination */
+.gallery-controls {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 22px 0 12px;
+    font: 14px Arial, sans-serif;
+}
+
+.gallery-controls button {
+    position: relative;
+    z-index: 6;
+    min-width: 115px;
+    border: 1px solid var(--rose);
+    border-radius: 24px;
+    padding: 10px 18px;
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+
+.gallery-controls button:hover:not(:disabled) {
+    background: var(--rose);
+    color: white;
+}
+
+.gallery-controls button:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+#pageInfo {
+    min-width: 40px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Dekorasi */
+.scrapbook-decor {
+    position: fixed;
+    z-index: 2;
+    color: rgba(183,110,121,.62);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+    text-shadow: 0 2px 4px rgba(255,255,255,.6);
+}
+
+.decor-one {
+    top: 8px;
+    left: 8px;
+    font-size: clamp(28px, 5vw, 58px);
+    transform: rotate(-18deg);
+}
+
+.decor-two {
+    right: 8px;
+    bottom: 8px;
+    color: rgba(193,159,112,.75);
+    font-size: clamp(34px, 6vw, 68px);
+    transform: rotate(16deg);
+}
+
+/* Animasi */
+@keyframes arrive {
+    from {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+/* Layar HP */
+@media (max-width: 600px) {
+    .memory-page {
+        padding: 10px 8px 20px;
+    }
+
+    .page-heading {
+        padding: 10px 0 24px;
+    }
+
+    .gallery {
+        gap: 8px;
+        height: clamp(280px, calc(100svh - 250px), 480px);
+    }
+
+    .photo-card {
+        padding: 3px;
+    }
+
+    .photo-number {
+        right: 3px;
+        bottom: 3px;
+        font-size: 8px;
+    }
+
+    .gallery-controls {
+        gap: 10px;
+        padding-top: 20px;
+    }
+
+    .gallery-controls button {
+        min-width: 100px;
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+
+    .decor-one {
+        top: 3px;
+        left: 3px;
+    }
+
+    .decor-two {
+        right: 3px;
+        bottom: 3px;
+    }
+}
+
+/* Hormati pengaturan pengurangan animasi */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

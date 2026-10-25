@@ -1,0 +1,204 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family: "Parisienne", cursive;
+    color: #B76E79;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:100vh;
+}
+
+    
+.bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+        radial-gradient(circle at 15% 15%, rgba(255,255,255,.95), transparent 32%),
+        radial-gradient(circle at 85% 80%, rgba(230,174,180,.45), transparent 35%),
+        linear-gradient(135deg, #fdf5ee, #f7e1e5 55%, #f5e8d8);
+
+}
+
+
+button{
+    color: #B76E79;
+}
+
+.card{
+
+    position: relative;
+
+    width:350px;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+    background: rgba(255,255,255,.2);
+
+    backdrop-filter: blur(15px);
+
+    border: 1px solid rgba(255,255,255,.3);
+
+    box-shadow: 0 8px 30px rgba(0,0,0,.2);
+
+    transition: .5s ease;
+
+    transition: .5s ease;
+
+
+
+}
+
+.keypad{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:15px;
+    
+    margin-top: 30px;
+
+}
+
+button{
+
+    width: 70px;
+    height: 70px;
+
+    border: none;
+
+    border-radius: 20%;
+
+    background: rgba(255,255,255,.4);
+
+    backdrop-filter: blur(8px);
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+    transition:.2s;
+}
+
+button:hover{
+
+    background:pink;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,.15);
+    transition: .25s ease;
+}
+
+.pin{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin:20px 0;
+}
+
+.pin span{
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    border:2px solid #555;
+    transition:.5s ease;
+
+}
+
+.kunci{
+    position: absolute;
+}
+
+.bunga{
+    position: absolute;
+    width: 140px;
+    top: 370px;
+    left: 250px;
+    
+}
+
+.gembok{
+    position: absolute;
+    width: 190px;
+    bottom: 100px;
+    left: 70px;
+    transform: rotate(-15deg);
+    opacity: 80%;
+}
+
+.kunci1{
+    position: absolute;
+    width: 150px;
+    bottom: 380px;
+    right: 260px;
+    transform: rotate(25deg);
+}
+
+.shake{
+
+    animation:shake .4s;
+
+}
+
+@keyframes shake{
+
+0%{
+transform:translateX(0);
+}
+
+20%{
+transform:translateX(-12px);
+}
+
+40%{
+transform:translateX(12px);
+}
+
+60%{
+transform:translateX(-12px);
+}
+
+80%{
+transform:translateX(12px);
+}
+
+100%{
+transform:translateX(0);
+}
+
+}
+
+body{
+
+    opacity:1;
+
+    transition:opacity .6s ease;
+
+}
+
+body.fade-out{
+
+    opacity:0;
+
+}
