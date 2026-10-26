@@ -29,7 +29,25 @@
         <div class="scrapbook-decor decor-one" aria-hidden="true">✿</div>
         <div class="scrapbook-decor decor-two" aria-hidden="true">❀</div>
     </main>
+   
+    <audio id="musik" loop preload="none">
+        <source src="images/musik.mp3" type="audio/mpeg">
+    </audio>
+
     <script src="js/photo.js"></script>
+    <script>
+        const musik = document.getElementById("musik");
+
+        musik.play().catch(() => {
+            document.addEventListener("click", () => {
+                musik.play().catch(() => {});
+            }, { once: true });
+        });
+    </script>
+</body>
+</html>
+
+<script src="js/photo.js"></script>
 
 </div>
 </body>
