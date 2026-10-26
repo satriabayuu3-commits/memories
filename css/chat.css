@@ -374,7 +374,7 @@ body::before{
 
     box-shadow:0 10px 25px rgba(0,0,0,.25);
 
-    background:#ee73a5;
+    background:#5e544e;
 
 }
 
@@ -658,4 +658,75 @@ body{
     .message.time-lapse-message {
         animation: none;
     }
+}
+
+
+/* Chat lama makin blur saat time-lapse */
+.message.time-lapse-message {
+    filter: blur(0);
+    transition: filter 0.25s ease;
+    will-change: filter;
+}
+
+/* Efek blur hanya aktif setelah time-lapse dimulai */
+.chat-area.time-lapse-active .message {
+    filter: blur(2px);
+}
+
+/* Pesan yang sedang melewati bagian tengah layar */
+.chat-area.time-lapse-active .message.in-focus {
+    filter: blur(0);
+}
+
+/* Pesan lama yang sudah terlewati */
+.chat-area.time-lapse-active .message.passed {
+    filter: blur(4px);
+    opacity: 0.55;
+}
+
+/* Jangan biarkan pengguna menggulir manual */
+.chat-area.time-lapse-locked {
+    overflow-y: hidden !important;
+    overscroll-behavior: none;
+    scrollbar-width: none;
+}
+
+.chat-area.time-lapse-locked::-webkit-scrollbar {
+    display: none;
+}
+
+/* Default: pesan time-lapse diblur */
+.chat-area.time-lapse-active .message.time-lapse-message {
+    filter: blur(3px);
+    opacity: 0.6;
+    transition: filter 0.2s ease, opacity 0.2s ease;
+}
+
+/* Pesan yang sedang jadi fokus */
+.chat-area.time-lapse-active
+.message.time-lapse-message.in-focus {
+    filter: blur(0);
+    opacity: 1;
+}
+
+/* Pesan yang sudah lewat */
+.chat-area.time-lapse-active
+.message.time-lapse-message.passed {
+    filter: blur(4px);
+    opacity: 0.45;
+}
+
+/* Pesan terakhir tetap jelas saat guliran selesai */
+.chat-area.time-lapse-active
+.message.time-lapse-message.last-message {
+    filter: blur(0);
+    opacity: 1;
+}
+
+.chat-area.time-lapse-active .message.time-lapse-message,
+.chat-area.time-lapse-active .message.time-lapse-message.passed,
+.chat-area.time-lapse-active .message.time-lapse-message.in-focus,
+.chat-area.time-lapse-active .message.time-lapse-message.last-message {
+    filter: blur(4px) !important;
+    opacity: 0.55;
 }
