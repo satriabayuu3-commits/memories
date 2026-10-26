@@ -545,3 +545,117 @@ body{
     }
 
 }
+
+
+/* ==========================
+   TIME-LAPSE CHAT
+   Tambahan, CSS lama tetap
+========================== */
+
+.chat-window {
+    height: min(780px, 94vh);
+    height: min(780px, 94dvh);
+    min-height: 0;
+}
+
+.chat-area {
+    scroll-behavior: auto;
+    overscroll-behavior: contain;
+}
+
+/* Penanda waktu di antara kumpulan chat */
+.time-divider {
+    align-self: center;
+    max-width: 90%;
+    margin: 14px 0;
+    padding: 7px 13px;
+
+    border: 1px solid rgba(183, 110, 121, 0.18);
+    border-radius: 20px;
+
+    background: rgba(255, 253, 248, 0.88);
+    color: #8b6268;
+
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+    letter-spacing: 0.3px;
+
+    box-shadow: 0 2px 8px rgba(87, 54, 51, 0.06);
+}
+
+/* Bubble yang ditambahkan selama time-lapse */
+.message.time-lapse-message {
+    flex-shrink: 0;
+    animation: timeLapseAppear 0.12s ease-out both;
+}
+
+@keyframes timeLapseAppear {
+    from {
+        opacity: 0.4;
+        transform: translateY(3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Ukuran chat tetap nyaman di HP */
+@media (max-width: 480px) {
+    .chat-window {
+        width: 95%;
+        max-width: 420px;
+        border-radius: 24px;
+    }
+
+    .chat-header {
+        flex-shrink: 0;
+    }
+
+    .chat-area {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .message {
+        max-width: 85%;
+        padding: 10px 13px;
+        font-size: 14px;
+    }
+
+    .footer {
+        flex-shrink: 0;
+        margin-bottom: 18px;
+        padding-top: 8px;
+    }
+}
+
+@media (max-height: 600px) {
+    .chat-window {
+        height: 96vh;
+        height: 96dvh;
+    }
+
+    .chat-header {
+        height: 65px;
+        min-height: 65px;
+        padding: 8px 14px;
+    }
+
+    .avatar {
+        width: 42px;
+        height: 42px;
+    }
+
+    .footer {
+        margin-bottom: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .message.time-lapse-message {
+        animation: none;
+    }
+}
