@@ -4,7 +4,7 @@ const prevBtn = document.querySelector("#prevBtn");
 const nextBtn = document.querySelector("#nextBtn");
 const pageInfo = document.querySelector("#pageInfo");
 
-const photos = Array.from({ length: 36 }, (_, i) => {
+const photos = Array.from({ length: 33 }, (_, i) => {
     const number = i + 1;
     return `images/foto (${number}).webp`;
 });
