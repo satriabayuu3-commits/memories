@@ -7,20 +7,11 @@ const windowChat = document.querySelector(".chat-window");
 
 // =========================
 // CHAT PERTAMA
-// Tetap memakai pesan asli lu
 // =========================
 
 const messages = [
-    {
-        sender: "tiara",
-        text: "satria, ini tiara",
-        time: "10:04"
-    },
-    {
-        sender: "me",
-        text: "ohh iyaa",
-        time: "10:04"
-    },
+    { sender: "tiara", text: "satria, ini tiara", time: "10:04" },
+    { sender: "me", text: "ohh iyaa", time: "10:04" },
     {
         sender: "tiara",
         text: "hardisk gimana? mau beli offline aja?",
@@ -34,12 +25,9 @@ const messages = [
 ];
 
 // =========================
-// CONTOH CHAT UNTUK TIME-LAPSE
-//
-// Ganti teks contoh ini dengan cuplikan
-// chat asli kalian kalau sudah siap.
-// Baris-baris ini diulang untuk menciptakan
-// efek banyaknya percakapan yang terlewati.
+// CHAT TIME-LAPSE
+// Ganti dengan cuplikan chat asli
+// jika ingin lebih personal.
 // =========================
 
 const timeLapseLines = [
@@ -76,13 +64,20 @@ const timeLapseLines = [
 ];
 
 const timePeriods = [
-    "Hari-hari berikutnya",
+    "cerita terus berlanjut",
     "Beberapa minggu kemudian",
     "Bulan-bulan berlalu",
     "Lebih banyak cerita terlewati",
     "Hari berganti, chat terus bertambah",
     "Dan waktu terus berjalan..."
 ];
+
+// =========================
+// STATE
+// =========================
+
+let messageIndex = 0;
+let timeLapseStarted = false;
 
 // =========================
 // FUNGSI BANTUAN
@@ -92,16 +87,14 @@ function scrollBottom() {
     chatArea.scrollTop = chatArea.scrollHeight;
 }
 
-function createMessage(sender, text, time = "", timeLapse = false) {
+function createMessage(sender, text, time = "", isTimeLapse = false) {
     const bubble = document.createElement("div");
+    bubble.className = `message ${sender}`;
 
-    bubble.className = "message " + sender;
-
-    if (timeLapse) {
+    if (isTimeLapse) {
         bubble.classList.add("time-lapse-message");
     }
 
-    // Gunakan textContent agar isi pesan aman
     const messageText = document.createElement("div");
     messageText.textContent = text;
     bubble.appendChild(messageText);
@@ -115,7 +108,7 @@ function createMessage(sender, text, time = "", timeLapse = false) {
 
     chatArea.appendChild(bubble);
 
-    if (!timeLapse) {
+    if (!isTimeLapse) {
         scrollBottom();
     }
 
@@ -124,10 +117,8 @@ function createMessage(sender, text, time = "", timeLapse = false) {
 
 function showTimeDivider(text) {
     const divider = document.createElement("div");
-
     divider.className = "time-divider";
     divider.textContent = text;
-
     chatArea.appendChild(divider);
 }
 
@@ -141,7 +132,6 @@ function showTyping() {
     const typing = document.createElement("div");
     typing.className = "typing";
     typing.id = "typing";
-
     typing.innerHTML = `
         <span></span>
         <span></span>
@@ -156,77 +146,67 @@ function hideTyping() {
     status.innerText = "Online";
 
     const typing = document.getElementById("typing");
-
-    if (typing) {
-        typing.remove();
-    }
+    if (typing) typing.remove();
 }
 
 // =========================
-// CHAT PERTAMA MUNCUL
+// CHAT AWAL
 // =========================
 
-let index = 0;
-let timeLapseStarted = false;
-
 function nextMessage() {
-    if (index >= messages.length) {
+    if (messageIndex >= messages.length) {
         runTimeLapse();
         return;
     }
 
-    const msg = messages[index];
+    const msg = messages[messageIndex];
 
     if (msg.sender === "me") {
         createMessage(msg.sender, msg.text, msg.time);
-
-        index++;
-
+        messageIndex++;
         setTimeout(nextMessage, 900);
-    } else {
-        showTyping();
-
-        setTimeout(function () {
-            hideTyping();
-
-            createMessage(msg.sender, msg.text, msg.time);
-
-            index++;
-
-            setTimeout(nextMessage, 900);
-        }, 1800);
+        return;
     }
+
+    showTyping();
+
+    setTimeout(() => {
+        hideTyping();
+        createMessage(msg.sender, msg.text, msg.time);
+        messageIndex++;
+        setTimeout(nextMessage, 900);
+    }, 1800);
 }
 
 // =========================
 // TIME-LAPSE
-// Ratusan chat melewati layar
 // =========================
 
 function runTimeLapse() {
     if (timeLapseStarted) return;
-
     timeLapseStarted = true;
 
     status.innerText = "Banyak cerita terlewati...";
 
-    // Simpan posisi akhir chat pertama
-    const startScroll = chatArea.scrollTop;
+    // Kunci scroll manual hanya saat time-lapse.
+    chatArea.classList.add("time-lapse-active");
+    chatArea.classList.add("time-lapse-locked");
 
-    // 6 putaran x 30 pesan = 180 bubble
+    const startScroll = chatArea.scrollTop;
     const repetitions = 6;
 
     let messageNumber = 0;
 
+    // Siapkan seluruh pesan sebelum animasi dimulai.
     for (let round = 0; round < repetitions; round++) {
         showTimeDivider(timePeriods[round]);
 
         for (const msg of timeLapseLines) {
             messageNumber++;
 
-            // Waktu tampilan saja, bukan timestamp asli
-            const minutes = (messageNumber * 3) % 60;
-            const hours = Math.floor(messageNumber / 20) % 24;
+            const totalMinutes = messageNumber * 3;
+            const hours = Math.floor(totalMinutes / 60) % 24;
+            const minutes = totalMinutes % 60;
 
             const displayTime =
                 String(hours).padStart(2, "0") + ":" +
@@ -241,59 +221,83 @@ function runTimeLapse() {
         }
     }
 
-    // Paksa scroll langsung dikendalikan animasi JS
     chatArea.style.scrollBehavior = "auto";
 
     const endScroll = chatArea.scrollHeight;
-    const distance = endScroll - startScroll;
-    const duration = 5500;
+    const distance = Math.max(0, endScroll - startScroll);
+    const duration = 8000;
     const startTime = performance.now();
 
-    function animateScroll(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
+    const timeLapseMessages = [
+        ...chatArea.querySelectorAll(".message.time-lapse-message")
+    ];
 
-        // Kecepatan meningkat, lalu melambat menjelang akhir
-        const eased =
-            progress < 0.15
-                ? 0.15 * (progress / 0.15) ** 2
-                : 0.15 + 0.85 *
-                  (1 - (1 - (progress - 0.15) / 0.85) ** 2);
+    function updateBlur() {
+        const areaRect = chatArea.getBoundingClientRect();
+        const focusY = areaRect.top + areaRect.height * 0.48;
 
-        chatArea.scrollTop = startScroll + distance * eased;
+        timeLapseMessages.forEach((msg) => {
+            const rect = msg.getBoundingClientRect();
+            const centerY = rect.top + rect.height / 2;
 
-        if (progress < 1) {
-            requestAnimationFrame(animateScroll);
-        } else {
-            chatArea.scrollTop = chatArea.scrollHeight;
+            msg.classList.remove("in-focus", "passed");
 
-            status.innerText = "Online";
-
-            // Tampilkan tombol setelah guliran selesai
-            setTimeout(function () {
-                nextBtn.classList.add("show");
-            }, 700);
-        }
+            if (centerY < focusY - 35) {
+                msg.classList.add("passed");
+            } else if (centerY <= focusY + 35) {
+                msg.classList.add("in-focus");
+            }
+        });
     }
 
-    requestAnimationFrame(animateScroll);
+    
+function animateScroll(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+        const eased =
+    progress * progress * progress *
+    (progress * (progress * 6 - 15) + 10);
+
+    chatArea.scrollTop = startScroll + distance * eased;
+
+    if (progress < 1) {
+        requestAnimationFrame(animateScroll);
+        return;
+    }
+
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    // Semua chat time-lapse tetap blur.
+    timeLapseMessages.forEach((msg) => {
+        msg.classList.remove("in-focus", "last-message");
+        msg.classList.add("passed");
+    });
+
+    status.innerText = "Online";
+
+    setTimeout(() => {
+        nextBtn.classList.add("show");
+    }, 700);
+}
+
+requestAnimationFrame(animateScroll);
+
 }
 
 // =========================
 // START
-// Opening asli tetap dipakai
 // =========================
 
 window.onload = function () {
     windowChat.style.display = "none";
 
-    setTimeout(function () {
+    setTimeout(() => {
         opening.style.opacity = "0";
 
-        setTimeout(function () {
+        setTimeout(() => {
             opening.style.display = "none";
             windowChat.style.display = "flex";
-
             nextMessage();
         }, 500);
     }, 1500);
@@ -301,7 +305,6 @@ window.onload = function () {
 
 // =========================
 // NEXT PAGE
-// Tetap menuju photo.html
 // =========================
 
 nextBtn.addEventListener("click", function () {
