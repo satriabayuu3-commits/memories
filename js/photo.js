@@ -65,3 +65,11 @@ nextBtn.addEventListener("click", () => {
 });
 
 renderGallery();
+
+const musik = document.getElementById("musik");
+
+musik.play().catch(() => {
+  document.addEventListener("click", () => {
+    musik.play().catch(() => {});
+  }, { once: true });
+});
